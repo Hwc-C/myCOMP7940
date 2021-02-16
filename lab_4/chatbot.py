@@ -29,6 +29,8 @@ def main():
 
     # on different commands - answer in Telegram
     dispatcher.add_handler(CommandHandler("add", add))
+    dispatcher.add_handler(CommandHandler("decr", decr))
+    dispatcher.add_handler(CommandHandler("del", delete))
     dispatcher.add_handler(CommandHandler("help", help_command))
     dispatcher.add_handler(CommandHandler("hello", hello_command))
 
@@ -36,7 +38,6 @@ def main():
     # To start the bot:
     updater.start_polling()
     updater.idle()
-
 
 def echo(update, context):
     reply_message = update.message.text.upper()
@@ -63,10 +64,34 @@ def add(update: Update, context: CallbackContext) -> None:
     except (IndexError, ValueError):
         update.message.reply_text('Usage: /add <keyword>')
 
+def decr(update: Update, context: CallbackContext) -> None:
+    """Send a message when the command /decr is issued."""
+    try: 
+        global redis1
+        logging.info(context.args[0])
+        msg = context.args[0]   # /decr keyword <-- this should store the keyword
+        redis1.decr(msg)
+        update.message.reply_text('You have said ' + msg +  ' for ' + redis1.get(msg).decode('UTF-8') + ' times.')
+    except (IndexError, ValueError):
+        update.message.reply_text('Usage: /decr <keyword>')
+
+
+def delete(update: Update, context: CallbackContext) -> None:
+    """Send a message when the command /delete is issued."""
+    try: 
+        global redis1
+        logging.info(context.args[0])
+        msg = context.args[0]   # /delete keyword <-- this should store the keyword
+        redis1.delete(msg)
+        update.message.reply_text('You have deleted ' + msg)
+    except (IndexError, ValueError):
+        update.message.reply_text('Usage: /del <keyword>')
+
+
 def hello_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /hello <name> is issued"""
     try:
-        update.message.reply_text('Hello {}'.format(context.args[0]))
+        update.message.reply_text('Good day, {}!'.format(context.args[0]))
     except (IndexError, ValueError):
         update.message.reply_text('Usage: /hello <name>')
 	
