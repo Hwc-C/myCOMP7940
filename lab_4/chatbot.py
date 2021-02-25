@@ -7,11 +7,22 @@ import redis
 
 global redis1
 
+def internet_on(TOKEN):
+	try:
+		response=urllib2.urlopen('https://api.telegram.org/bot{}/getUpdates'.format(TOKEN),timeout=1)
+		return True
+	except urllib2.URLError as err: 
+		pass
+		return False
+
 def main():
     # Load your token and create an Updater for your Bot
     
     config = configparser.ConfigParser()
     config.read('config.ini')
+	
+	# internet_on(config['TELEGRAM']['ACCESS_TOKEN'])
+
     updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']), use_context=True)
     dispatcher = updater.dispatcher
     
