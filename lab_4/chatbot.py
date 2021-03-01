@@ -21,7 +21,7 @@ def main():
     config = configparser.ConfigParser()
     config.read('config.ini')
 	
-	# internet_on(config['TELEGRAM']['ACCESS_TOKEN'])
+	# internet_on((config['TELEGRAM']['ACCESS_TOKEN']))
 
     updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']), use_context=True)
     dispatcher = updater.dispatcher
