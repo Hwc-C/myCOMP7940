@@ -1,2 +1,1 @@
-pyhton: python lab_4/chatbot.py
-
+python: python mychatbot/chatbot.py
